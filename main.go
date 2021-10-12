@@ -65,9 +65,11 @@ func processUpdate(update *api.Update) {
 	upmsg := update.Message
 	gid := upmsg.Chat.ID
 	uid := upmsg.From.ID
-	//检查是不是新加的群或者新开的人
+	//检查是不是新加的群或者新来的人
 	in := checkInGroup(gid)
-	if !in { //不在就需要加入, 内存中加一份, 数据库中添加一条空规则记录
+	if !in {
+		
+		//不在就需要加入, 内存中加一份, 数据库中添加一条空规则记录 进入新群
 		common.AddNewGroup(gid)
 		db.AddNewGroup(gid)
 	}
@@ -76,7 +78,7 @@ func processUpdate(update *api.Update) {
 	} else {
 		go processReplyCommond(update)
 		go processReply(update)
-		//新用户通过用户名检查是否是清真
+		//新用户通过用户名检查是否是清真 新人入群
 		if upmsg.NewChatMembers != nil {
 			for _, auser := range *(upmsg.NewChatMembers) {
 				if checkQingzhen(auser.UserName) ||
