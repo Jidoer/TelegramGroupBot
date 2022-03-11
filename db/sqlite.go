@@ -28,7 +28,7 @@ type peopleck struct {
 	Uid     int
 	Answer  string
 }
-
+/*
 //检查队列
 type cking struct {
 	id     int
@@ -36,6 +36,7 @@ type cking struct {
 	Uid    int
 	Answer string
 }
+*/
 
 // Init 数据库初始化，包括新建数据库（如果还没有建立），基本数据的读写
 func Init(newToken string) (token string) {
@@ -99,12 +100,12 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, gid, uid, Answer").Rows() // (*sql.Rows, error)
 	defer rows.Close()
 	for rows.Next() {
-		var cking cking
+		var cking peopleck
 		db.ScanRows(rows, &cking)
 		log.Println(cking)
 		if cking.Uid == uid {
 			if cking.Answer == Answer {
-				db.Model(&peopleck{}).Delete("id=?", cking.id)
+				db.Model(&peopleck{}).Delete("id=?", peopleck{}.ID)
 				return true
 			}
 		} else {
@@ -120,7 +121,7 @@ func IfPeopleck(gid int64, uid int) bool {
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("gid, uid").Rows() // (*sql.Rows, error)
 	defer rows.Close()
 	for rows.Next() {
-		var cking cking
+		var cking peopleck
 		db.ScanRows(rows, &cking)
 		log.Println(cking)
 		if cking.Uid == uid {
