@@ -40,6 +40,7 @@ func checkInGroup(id int64) bool {
 }
 
 func chengfa(gid int64, user api.User) {
+	/*
 	botme, _ := bot.GetChatMember(api.ChatConfigWithUser{ChatID: gid, UserID: bot.Self.ID})
 	msg := api.NewMessage(gid, "")
 	if botme.CanRestrictMembers {
@@ -51,6 +52,10 @@ func chengfa(gid int64, user api.User) {
 		msg.ParseMode = "Markdown"
 	}
 	sendMessage(msg)
+	*/
+	msg := api.NewMessage(gid,"无管理权限!")
+	sendMessage(msg)
+	
 }
 
 /**
