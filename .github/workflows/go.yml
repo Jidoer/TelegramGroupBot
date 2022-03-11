@@ -27,7 +27,7 @@ jobs:
     - run: mkdir -p build
 
     - name: Build
-      run: go build -v -ldflags "-w -s" -trimpath -o build/tg-keyword-reply-bot .
+      run: go build -v -ldflags "-w -s" -trimpath -o build/TelegramGroupBot .
     
     - uses: actions/upload-artifact@v1
       with:

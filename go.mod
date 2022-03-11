@@ -1,4 +1,4 @@
-module tg-keyword-reply-bot
+module TelegramGroupBot
 
 go 1.14
 

@@ -1,7 +1,7 @@
 package db
 
 import (
-	"tg-keyword-reply-bot/common"
+	"TelegramGroupBot/common"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // 初始化gorm使用sqlite

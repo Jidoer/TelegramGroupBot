@@ -1,11 +1,11 @@
 package main
 
 import (
+	"TelegramGroupBot/common"
+	"TelegramGroupBot/db"
 	"regexp"
 	"strconv"
 	"strings"
-	"tg-keyword-reply-bot/common"
-	"tg-keyword-reply-bot/db"
 )
 
 const addText = "格式要求:\r\n" +

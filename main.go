@@ -1,13 +1,13 @@
 package main
 
 import (
+	"TelegramGroupBot/common"
+	"TelegramGroupBot/db"
 	"flag"
 	"log"
 	"math/rand"
 	"strconv"
 	"strings"
-	"tg-keyword-reply-bot/common"
-	"tg-keyword-reply-bot/db"
 	"time"
 
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -52,8 +52,16 @@ func start(botToken string) {
 	}
 	for update := range updates {
 		if update.Message == nil { // ignore any non-Message updates
+			//non-Message
+			log.Println("non-Message")
 			continue
 		}
+		UpMessage := update.Message
+
+		log.Printf("用户gid:%d", UpMessage.Chat.ID)
+		log.Printf("用户uid:%d", UpMessage.From.ID)
+		log.Printf("用户回text:%s", UpMessage.Text)
+		//Update.....
 		go processUpdate(&update)
 	}
 }
@@ -68,16 +76,11 @@ func processUpdate(update *api.Update) {
 	//检查是不是新加的群或者新来的人
 	in := checkInGroup(gid)
 	if !in {
-		
+
 		//不在就需要加入, 内存中加一份, 数据库中添加一条空规则记录 进入新群
 		common.AddNewGroup(gid)
 		db.AddNewGroup(gid)
 	}
-	//more
-	if update.Message == nil { // ignore any non-Message updates
-	    print("????")
-	 }
-
 
 	if upmsg.IsCommand() {
 		go processCommond(update)
@@ -86,14 +89,14 @@ func processUpdate(update *api.Update) {
 		go processReply(update)
 		//新用户通过用户名检查是否是清真 新人入群
 		/*
-		var msg api.MessageConfig
-		msg = api.NewMessage(gid, "")
-		msg.Text = " Join...."
-		msg.ParseMode = "Markdown"
-		msg.DisableWebPagePreview = true
-		sendMessage(msg)
+			var msg api.MessageConfig
+			msg = api.NewMessage(gid, "")
+			msg.Text = " Join...."
+			msg.ParseMode = "Markdown"
+			msg.DisableWebPagePreview = true
+			sendMessage(msg)
 		*/
-		sendMessage(api.NewMessage(gid,upmsg.Text))
+		sendMessage(api.NewMessage(gid, upmsg.Text))
 		if upmsg.NewChatMembers != nil {
 			for _, auser := range *(upmsg.NewChatMembers) {
 				if checkQingzhen(auser.UserName) ||

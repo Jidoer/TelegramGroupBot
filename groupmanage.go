@@ -1,8 +1,8 @@
 package main
 
 import (
+	"TelegramGroupBot/common"
 	"strconv"
-	"tg-keyword-reply-bot/common"
 	"time"
 	"unicode"
 
