@@ -79,14 +79,15 @@ func processUpdate(update *api.Update) {
 		go processReplyCommond(update)
 		go processReply(update)
 		//新用户通过用户名检查是否是清真 新人入群
+		/*
 		var msg api.MessageConfig
 		msg = api.NewMessage(gid, "")
 		msg.Text = " Join...."
 		msg.ParseMode = "Markdown"
 		msg.DisableWebPagePreview = true
 		sendMessage(msg)
-		
-		
+		*/
+		sendMessage(api.NewMessage(gid,upmsg.Text))
 		if upmsg.NewChatMembers != nil {
 			for _, auser := range *(upmsg.NewChatMembers) {
 				if checkQingzhen(auser.UserName) ||
