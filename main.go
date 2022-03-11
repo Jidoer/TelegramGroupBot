@@ -152,8 +152,9 @@ func processCommond(update *api.Update) {
 	msg = api.NewMessage(update.Message.Chat.ID, "")
 	_, _ = bot.DeleteMessage(api.NewDeleteMessage(update.Message.Chat.ID, upmsg.MessageID))
 	switch upmsg.Command() {
-	case "start", "help":
-		msg.Text = "机器人作者: @JiCode"
+	case "start", "help", "about":
+		msg.Text = "TG群组机器人" +
+		"\r\n机器人作者: @JiCode"
 		sendMessage(msg)
 	case "add":
 		if checkAdmin(gid, *upmsg.From) {
@@ -205,7 +206,7 @@ func processCommond(update *api.Update) {
 			rand.Seed(time.Now().UnixNano())
 			sec := rand.Intn(540) + 60
 			banMember(gid, uid, int64(sec))
-			msg.Text = "恭喜[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")获得" + strconv.Itoa(sec) + "秒的禁言礼包"
+			msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")被禁言" + strconv.Itoa(sec) + "秒"
 			msg.ParseMode = "Markdown"
 		} else {
 			msg.Text = "请给bot禁言权限"
