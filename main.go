@@ -74,6 +74,9 @@ func processUpdate(update *api.Update) {
 		db.AddNewGroup(gid)
 	}
 	//more
+	if update.Message == nil { // ignore any non-Message updates
+	    print("????")
+	 }
 
 
 	if upmsg.IsCommand() {
