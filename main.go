@@ -86,7 +86,7 @@ func processUpdate(update *api.Update) {
 	} else {
 		go processReplyCommond(update)
 		go processReply(update)
-		//新用户通过用户名检查是否是清真 新人入群
+
 		/*
 			var msg api.MessageConfig
 			msg = api.NewMessage(gid, "")
@@ -96,6 +96,8 @@ func processUpdate(update *api.Update) {
 			sendMessage(msg)
 		*/
 		sendMessage(api.NewMessage(gid, upmsg.Text))
+
+		// 新人入群 新用户通过用户名检查是否是清真
 		if upmsg.NewChatMembers != nil {
 			for _, auser := range *(upmsg.NewChatMembers) {
 				if checkQingzhen(auser.UserName) ||
@@ -104,6 +106,7 @@ func processUpdate(update *api.Update) {
 					banMember(gid, uid, -1)
 				}
 			}
+			log.Println("NewPeople")
 		}
 		//检查清真并剔除
 		if checkQingzhen(upmsg.Text) {
