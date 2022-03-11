@@ -10,7 +10,7 @@ import (
 /**
  * 发送文字消息
  */
-func sendMessage(msg api.MessageConfig) api.Message {
+func sendMessagedel(msg api.MessageConfig) api.Message {
 	if msg.Text == "" {
 		return api.Message{}
 	}
@@ -21,6 +21,18 @@ func sendMessage(msg api.MessageConfig) api.Message {
 	go deleteMessage(msg.ChatID, mmsg.MessageID)
 	return mmsg
 }
+func sendMessagenodel(msg api.MessageConfig) api.Message {
+	if msg.Text == "" {
+		return api.Message{}
+	}
+	mmsg, err := bot.Send(msg)
+	if err != nil {
+		log.Println(err)
+	}
+	//go deleteMessage(msg.ChatID, mmsg.MessageID)
+	return mmsg
+}
+
 
 /**
  * 发送图片消息, 需要是已经存在的图片链接
@@ -75,6 +87,7 @@ func sendFile(chatid int64, fileid string) api.Message {
 }
 
 func deleteMessage(gid int64, mid int) {
+	//新线程内执行
 	time.Sleep(time.Second * 240)
 	_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, mid))
 }

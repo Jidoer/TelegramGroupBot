@@ -95,7 +95,7 @@ func processUpdate(update *api.Update) {
 			msg.DisableWebPagePreview = true
 			sendMessage(msg)
 		*/
-		sendMessage(api.NewMessage(gid, upmsg.Text))
+		sendMessagedel(api.NewMessage(gid, upmsg.Text))
 
 		// 新人入群 新用户通过用户名检查是否是清真
 		if upmsg.NewChatMembers != nil {
@@ -104,10 +104,17 @@ func processUpdate(update *api.Update) {
 					checkQingzhen(auser.FirstName) ||
 					checkQingzhen(auser.LastName) {
 					banMember(gid, uid, -1)
+				}else{
+
+					log.Println("NewPeople:" + auser.UserName)
+					sendMessagedel(api.NewMessage(gid,"欢迎新人:" + auser.UserName))
+					sendPhoto(gid,"https://t.me/c/1472018167/53095")
 				}
 			}
-			log.Println("NewPeople")
+
+
 		}
+
 		//检查清真并剔除
 		if checkQingzhen(upmsg.Text) {
 			_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
@@ -142,7 +149,7 @@ func processReply(update *api.Update) {
 		msg = api.NewMessage(gid, replyText)
 		msg.DisableWebPagePreview = true
 		msg.ReplyToMessageID = upmsg.MessageID
-		sendMessage(msg)
+		sendMessagedel(msg)
 	}
 }
 
@@ -157,7 +164,7 @@ func processCommond(update *api.Update) {
 	case "start", "help", "about":
 		msg.Text = "TG群组机器人" +
 		"\r\n机器人作者: @JiCode"
-		sendMessage(msg)
+		sendMessagedel(msg)
 	case "add":
 		if checkAdmin(gid, *upmsg.From) {
 			order := upmsg.CommandArguments()
@@ -169,7 +176,7 @@ func processCommond(update *api.Update) {
 				msg.ParseMode = "Markdown"
 				msg.DisableWebPagePreview = true
 			}
-			sendMessage(msg)
+			sendMessagedel(msg)
 		}
 	case "del":
 		if checkAdmin(gid, *upmsg.From) {
@@ -181,7 +188,7 @@ func processCommond(update *api.Update) {
 				msg.Text = delText
 				msg.ParseMode = "Markdown"
 			}
-			sendMessage(msg)
+			sendMessagedel(msg)
 		}
 	case "list":
 		if checkAdmin(gid, *upmsg.From) {
@@ -189,18 +196,18 @@ func processCommond(update *api.Update) {
 			msg.Text = "ID: " + strconv.FormatInt(gid, 10)
 			msg.ParseMode = "Markdown"
 			msg.DisableWebPagePreview = true
-			sendMessage(msg)
+			sendMessagedel(msg)
 			for _, rlist := range rulelists {
 				msg.Text = rlist
 				msg.ParseMode = "Markdown"
 				msg.DisableWebPagePreview = true
-				sendMessage(msg)
+				sendMessagedel(msg)
 			}
 		}
 	case "admin":
 		msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(uid) + ") 请求管理员出来打屁股\r\n\r\n" + getAdmins(gid)
 		msg.ParseMode = "Markdown"
-		sendMessage(msg)
+		sendMessagedel(msg)
 		banMember(gid, uid, 30)
 	case "banme":
 		botme, _ := bot.GetChatMember(api.ChatConfigWithUser{ChatID: gid, UserID: bot.Self.ID})
@@ -213,7 +220,7 @@ func processCommond(update *api.Update) {
 		} else {
 			msg.Text = "请给bot禁言权限"
 		}
-		sendMessage(msg)
+		sendMessagedel(msg)
 	case "me":
 		myuser := upmsg.From
 		msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ") 的账号信息" +
@@ -223,7 +230,7 @@ func processCommond(update *api.Update) {
 			"\r\nFirstName: " + myuser.FirstName +
 			"\r\nIsBot: " + strconv.FormatBool(myuser.IsBot)
 		msg.ParseMode = "Markdown"
-		sendMessage(msg)
+		sendMessagedel(msg)
 	default:
 	}
 }
@@ -245,7 +252,7 @@ func processReplyCommond(update *api.Update) {
 					msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ") 禁言了 " +
 						"[" + upmsg.ReplyToMessage.From.String() + "](tg://user?id=" + strconv.Itoa(reolyToUserId) + ") "
 					msg.ParseMode = "Markdown"
-					sendMessage(msg)
+					sendMessagedel(msg)
 				}
 			}
 		case "unban":
@@ -257,7 +264,7 @@ func processReplyCommond(update *api.Update) {
 				msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ") 解禁了 " +
 					"[" + upmsg.ReplyToMessage.From.String() + "](tg://user?id=" + strconv.Itoa(reolyToUserId) + ") "
 				msg.ParseMode = "Markdown"
-				sendMessage(msg)
+				sendMessagedel(msg)
 			}
 		case "kick":
 			if checkAdmin(gid, *upmsg.From) {

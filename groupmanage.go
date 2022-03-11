@@ -54,7 +54,7 @@ func chengfa(gid int64, user api.User) {
 	sendMessage(msg)
 	*/
 	msg := api.NewMessage(gid,"无管理权限!")
-	sendMessage(msg)
+	sendMessagedel(msg)
 	
 }
 
