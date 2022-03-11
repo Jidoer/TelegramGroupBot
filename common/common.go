@@ -1,6 +1,8 @@
 package common
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // RuleMap 群组规则的字典，匹配规则=>回复内容
 type RuleMap map[string]string
@@ -32,3 +34,13 @@ func AddNewGroup(gid int64) {
 	AllGroupId = append(AllGroupId, gid)
 	AllGroupRules[gid] = make(RuleMap)
 }
+
+
+/*
+	var msg api.MessageConfig
+	msg = api.NewMessage(gid, "")
+	msg.Text = " Join...."
+	msg.ParseMode = "Markdown"
+	msg.DisableWebPagePreview = true
+	sendMessage(msg)
+*/

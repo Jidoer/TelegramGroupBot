@@ -11,6 +11,7 @@ import (
 	"time"
 
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
+
 	"github.com/robfig/cron"
 )
 
@@ -57,8 +58,7 @@ func start(botToken string) {
 			continue
 		}
 		UpMessage := update.Message
-		log.Printf("用户gid:%d用户uid:%dtext:%s", UpMessage.Chat.ID,UpMessage.From.ID,UpMessage.Text)
-		
+		log.Printf("用户gid:%d用户uid:%dtext:%s", UpMessage.Chat.ID, UpMessage.From.ID, UpMessage.Text)
 
 		//Update.....
 		go processUpdate(&update)
@@ -95,7 +95,16 @@ func processUpdate(update *api.Update) {
 			msg.DisableWebPagePreview = true
 			sendMessage(msg)
 		*/
-		sendMessagedel(api.NewMessage(gid, upmsg.Text))
+		//sendMessagedel(api.NewMessage(gid, upmsg.Text))
+		if db.IfPeopleck(gid, uid) {
+			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
+				sendMessagedel(api.NewMessage(gid, "欢迎欢迎! @"+upmsg.From.UserName))
+
+			} else {
+				sendMessagedel(api.NewMessage(gid, "验证码错误 @"+upmsg.From.UserName))
+				_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
+			}
+		}
 
 		// 新人入群 新用户通过用户名检查是否是清真
 		if upmsg.NewChatMembers != nil {
@@ -104,14 +113,19 @@ func processUpdate(update *api.Update) {
 					checkQingzhen(auser.FirstName) ||
 					checkQingzhen(auser.LastName) {
 					banMember(gid, uid, -1)
-				}else{
-
-					log.Println("NewPeople:" + auser.UserName)
-					sendMessagedel(api.NewMessage(gid,"欢迎新人:" + auser.UserName))
-					sendPhoto(gid,"https://t.me/c/1472018167/53095")
+				} else {
+					if !db.IfPeopleck(gid, uid) {
+						//Don't have so add it
+						ChuTi(upmsg)
+					}
+					//db.AddCKpeople(gid,uid)
+					/*
+						log.Println("NewPeople:" + auser.UserName)
+						sendMessagedel(api.NewMessage(gid,"欢迎新人: @" + auser.UserName))
+					*/
+					//sendPhoto(gid,"https://t.me/c/1472018167/53095")
 				}
 			}
-
 
 		}
 
@@ -163,7 +177,7 @@ func processCommond(update *api.Update) {
 	switch upmsg.Command() {
 	case "start", "help", "about":
 		msg.Text = "TG群组机器人" +
-		"\r\n机器人作者: @JiCode"
+			"\r\n机器人作者: @JiCode"
 		sendMessagedel(msg)
 	case "add":
 		if checkAdmin(gid, *upmsg.From) {

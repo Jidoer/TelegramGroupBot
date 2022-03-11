@@ -1,6 +1,7 @@
 package main
 
 import (
+	"TelegramGroupBot/db"
 	"log"
 	"time"
 
@@ -90,4 +91,14 @@ func deleteMessage(gid int64, mid int) {
 	//新线程内执行
 	time.Sleep(time.Second * 240)
 	_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, mid))
+}
+
+func ChuTi(Messg *api.Message) {
+	var msg api.MessageConfig
+	msg = api.NewMessage(Messg.Chat.ID, "")
+	msg.Text = "请回答题目用于验证 @"+Messg.From.UserName +
+	"<br> 10+5= ?"
+	msg.ParseMode = "Markdown"
+	msg.DisableWebPagePreview = true
+	db.AddCKpeople(Messg.Chat.ID,Messg.From.ID,"15")
 }
