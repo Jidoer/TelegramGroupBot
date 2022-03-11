@@ -57,10 +57,9 @@ func start(botToken string) {
 			continue
 		}
 		UpMessage := update.Message
+		log.Printf("用户gid:%d用户uid:%dtext:%s", UpMessage.Chat.ID,UpMessage.From.ID,UpMessage.Text)
+		
 
-		log.Printf("用户gid:%d", UpMessage.Chat.ID)
-		log.Printf("用户uid:%d", UpMessage.From.ID)
-		log.Printf("用户回text:%s", UpMessage.Text)
 		//Update.....
 		go processUpdate(&update)
 	}
