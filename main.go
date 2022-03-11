@@ -73,6 +73,9 @@ func processUpdate(update *api.Update) {
 		common.AddNewGroup(gid)
 		db.AddNewGroup(gid)
 	}
+	//more
+
+
 	if upmsg.IsCommand() {
 		go processCommond(update)
 	} else {
@@ -144,7 +147,7 @@ func processCommond(update *api.Update) {
 	_, _ = bot.DeleteMessage(api.NewDeleteMessage(update.Message.Chat.ID, upmsg.MessageID))
 	switch upmsg.Command() {
 	case "start", "help":
-		msg.Text = "本机器人能够自动回复特定关键词"
+		msg.Text = "机器人作者: @JiCode"
 		sendMessage(msg)
 	case "add":
 		if checkAdmin(gid, *upmsg.From) {
@@ -199,7 +202,7 @@ func processCommond(update *api.Update) {
 			msg.Text = "恭喜[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")获得" + strconv.Itoa(sec) + "秒的禁言礼包"
 			msg.ParseMode = "Markdown"
 		} else {
-			msg.Text = "请给我禁言权限,否则无法进行游戏"
+			msg.Text = "请给bot禁言权限"
 		}
 		sendMessage(msg)
 	case "me":
