@@ -100,5 +100,6 @@ func ChuTi(Messg *api.Message) {
 	"<br> 10+5= ?"
 	msg.ParseMode = "Markdown"
 	msg.DisableWebPagePreview = true
+	sendMessagedel(msg)
 	db.AddCKpeople(Messg.Chat.ID,Messg.From.ID,"15")
 }
