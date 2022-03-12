@@ -3,6 +3,7 @@ package db
 import (
 	"TelegramGroupBot/common"
 	"log"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // 初始化gorm使用sqlite
@@ -94,6 +95,7 @@ func AddCKpeople(gid int64, uid int, Answer string) {
 	if err := db.Create(&peopleck{GroupId: gid, Uid: uid, Answer: Answer}).Error; err != nil {
 		//ok
 	}
+	db.Close()
 
 }
 func CKpeopleProgress(gid int64, uid int, Answer string) bool {
@@ -101,20 +103,25 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, group_id, uid, answer").Rows() // (*sql.Rows, error)
 	defer rows.Close()
 	for rows.Next() {
+		//在群内查找她
 		var cking peopleck
 		db.ScanRows(rows, &cking)
 		log.Println(cking)
 		if cking.Uid == uid {
 			if cking.Answer == Answer {
 				//DELETE from `peoplecks` where (`id` = );
+				db.Close()//if find it , close db first! Then you can delete it
+				//答案正确删除记录
 				db.Where("id = ?", peopleck{}.ID).Delete(&peopleck{})
+				log.Println(strconv.Itoa(peopleck{}.Uid) + ": 验证成功!")
 				return true
 			}
 		} else {
 			return false
 		}
-		log.Println("删除验证")
 	}
+
+
 	return false
 }
 
