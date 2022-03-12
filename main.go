@@ -96,7 +96,7 @@ func processUpdate(update *api.Update) {
 			sendMessage(msg)
 		*/
 		//sendMessagedel(api.NewMessage(gid, upmsg.Text))
-		/*
+		
 		if db.IfPeopleck(gid, uid) {
 			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
 				sendMessagedel(api.NewMessage(gid, "欢迎欢迎! @"+upmsg.From.UserName))
@@ -106,7 +106,7 @@ func processUpdate(update *api.Update) {
 				_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 			}
 		}
-*/
+
 		// 新人入群 新用户通过用户名检查是否是清真
 		if upmsg.NewChatMembers != nil {
 			for _, auser := range *(upmsg.NewChatMembers) {
