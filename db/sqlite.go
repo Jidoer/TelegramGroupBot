@@ -73,15 +73,11 @@ func AddNewGroup(groupId int64) {
 		GroupId:  groupId,
 		RuleJson: "",
 	})
-	db.Close()
-
 }
 
 // UpdateGroupRule 更新群组的规则
 func UpdateGroupRule(groupId int64, ruleJson string) {
 	db.Model(&rule{}).Where("group_id=?", groupId).Update("rule_json", ruleJson)
-	db.Close()
-
 }
 
 func readAllGroupRules() {
@@ -99,14 +95,13 @@ func AddCKpeople(gid int64, uid int, Answer string) {
 	if err := db.Create(&peopleck{GroupId: gid, Uid: uid, Answer: Answer}).Error; err != nil {
 		//ok
 	}
-	db.Close()
 
 }
 
 func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 	//db.Model(&peopleck{}).Delete("group_id=?", gid)
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, group_id, uid, answer").Rows() // (*sql.Rows, error)
-	defer rows.Close()
+	//defer rows.Close()
 	var cking peopleck
 	i := 0
 	for rows.Next() {
@@ -123,16 +118,16 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 		*/
 		i++
 	}
+	rows.Close()
+	
 	if cking.Answer == Answer {
 		//DELETE from `peoplecks` where (`id` = );
 		//if find it , close rows first! Then you can delete it
 		//答案正确删除记录
 		db.Where("id = ?", peopleck{}.ID).Delete(&peopleck{})
 		log.Println(strconv.Itoa(peopleck{}.Uid) + ": 验证成功!")
-		db.Close()
 		return true
 	} else {
-		db.Close()
 		return false
 	}
 }
@@ -151,8 +146,6 @@ func IfPeopleck(gid int64, uid int) bool {
 		}
 		// do something
 	}
-	db.Close()
-
 	log.Println("IfPeopleck END")
 	return ifhave
 }

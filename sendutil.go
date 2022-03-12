@@ -97,7 +97,7 @@ func ChuTi(Messg *api.Message) {
 	var msg api.MessageConfig
 	msg = api.NewMessage(Messg.Chat.ID, "")
 	msg.Text = "请回答题目用于验证 @"+Messg.From.UserName +
-	"<br> 10+5= ?"
+	"10+5= ?"
 	msg.ParseMode = "Markdown"
 	msg.DisableWebPagePreview = true
 	sendMessagedel(msg)
