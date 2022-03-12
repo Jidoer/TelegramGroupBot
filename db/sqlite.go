@@ -118,6 +118,7 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 }
 
 func IfPeopleck(gid int64, uid int) bool {
+	log.Println("IfPeopleck")
 	ifhave := false
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, gid, uid, answer").Rows() // (*sql.Rows, error)
 	defer rows.Close()
@@ -130,5 +131,6 @@ func IfPeopleck(gid int64, uid int) bool {
 		}
 		// do something
 	}
+	log.Println("IfPeopleck END")
 	return ifhave
 }
