@@ -96,9 +96,9 @@ func deleteMessage(gid int64, mid int) {
 func ChuTi(Messg *api.Message) {
 	var msg api.MessageConfig
 	msg = api.NewMessage(Messg.Chat.ID, "")
-	msg.Text = "请回答题目用于验证 @"+Messg.From.UserName +
-	"\r\n请180秒内完成，否则会删除并拉黑"+
-	"\r\n <h2>10+5= ?</h2>"
+	msg.Text = "<i>请回答题目用于验证</i> @"+Messg.From.UserName +
+	"\r\n请180秒内完成，否则会删除拉黑"+
+	"\r\n <b>10+5= ?</b>"
 	msg.ParseMode = "Markdown"
 	msg.DisableWebPagePreview = false
 	sendMessagedel(msg)
