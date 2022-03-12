@@ -154,3 +154,5 @@ func IfPeopleck(gid int64, uid int) bool {
 	log.Println("IfPeopleck END")
 	return ifhave
 }
+
+

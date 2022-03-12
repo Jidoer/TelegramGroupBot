@@ -104,3 +104,10 @@ func ChuTi(Messg *api.Message) {
 	sendMessagedel(msg)
 	db.AddCKpeople(Messg.Chat.ID,Messg.From.ID,"15")
 }
+
+func PeopleCKdel(gid int64,uid int){
+	time.Sleep(time.Second*180)
+	if(db.IfPeopleck(gid,uid)){
+		banMember(gid, uid, -1)
+	}
+}

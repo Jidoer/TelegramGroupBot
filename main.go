@@ -96,13 +96,13 @@ func processUpdate(update *api.Update) {
 			sendMessage(msg)
 		*/
 		//sendMessagedel(api.NewMessage(gid, upmsg.Text))
-		
+
 		if db.IfPeopleck(gid, uid) {
 			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
 				sendMessagedel(api.NewMessage(gid, "欢迎欢迎! @"+upmsg.From.UserName))
 
 			} else {
-				sendMessagedel(api.NewMessage(gid, "验证码错误 @"+upmsg.From.UserName))
+				sendMessagedel(api.NewMessage(gid, "回答错误! @"+upmsg.From.UserName))
 				_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 			}
 		}
@@ -118,6 +118,8 @@ func processUpdate(update *api.Update) {
 					if !db.IfPeopleck(gid, uid) {
 						//Don't have so add it
 						ChuTi(upmsg)
+						//New process
+						go PeopleCKdel(gid, uid)
 					}
 					//db.AddCKpeople(gid,uid)
 					/*
@@ -293,3 +295,4 @@ func processReplyCommond(update *api.Update) {
 		}
 	}
 }
+
