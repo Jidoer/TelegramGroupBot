@@ -111,7 +111,7 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 
 			if cking.Answer == Answer {
 				//DELETE from `peoplecks` where (`id` = );
-				db.Close()//if find it , close db first! Then you can delete it
+				rows.Close() //if find it , close db first! Then you can delete it
 				//答案正确删除记录
 				db.Where("id = ?", peopleck{}.ID).Delete(&peopleck{})
 				log.Println(strconv.Itoa(peopleck{}.Uid) + ": 验证成功!")
@@ -119,11 +119,9 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 			}
 
 		} else {
-			rows.Close()
 			return false
 		}
 	}
-	rows.Close()
 	return false
 }
 
