@@ -95,34 +95,40 @@ func AddCKpeople(gid int64, uid int, Answer string) {
 	if err := db.Create(&peopleck{GroupId: gid, Uid: uid, Answer: Answer}).Error; err != nil {
 		//ok
 	}
-	db.Close()
 
 }
+
 func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 	//db.Model(&peopleck{}).Delete("group_id=?", gid)
 	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, group_id, uid, answer").Rows() // (*sql.Rows, error)
-	//defer rows.Close()
+	defer rows.Close()
+	var cking peopleck
+	i := 0
 	for rows.Next() {
 		//在群内查找她
-		var cking peopleck
 		db.ScanRows(rows, &cking)
 		log.Println(cking)
 		if cking.Uid == uid {
-
-			if cking.Answer == Answer {
-				//DELETE from `peoplecks` where (`id` = );
-				rows.Close() //if find it , close db first! Then you can delete it
-				//答案正确删除记录
-				db.Where("id = ?", peopleck{}.ID).Delete(&peopleck{})
-				log.Println(strconv.Itoa(peopleck{}.Uid) + ": 验证成功!")
-				return true
-			}
-
-		} else {
-			return false
+			break
 		}
+		/*
+			else {
+				return false
+			}
+		*/
+		i++
 	}
-	return false
+	
+	if cking.Answer == Answer {
+		//DELETE from `peoplecks` where (`id` = );
+		//if find it , close rows first! Then you can delete it
+		//答案正确删除记录
+		db.Where("id = ?", peopleck{}.ID).Delete(&peopleck{})
+		log.Println(strconv.Itoa(peopleck{}.Uid) + ": 验证成功!")
+		return true
+	} else {
+		return false
+	}
 }
 
 func IfPeopleck(gid int64, uid int) bool {
