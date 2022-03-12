@@ -118,7 +118,7 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 
 func IfPeopleck(gid int64, uid int) bool {
 	ifhave := false
-	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("gid, uid").Rows() // (*sql.Rows, error)
+	rows, _ := db.Model(&peopleck{}).Where("group_id = ?", gid).Select("id, gid, uid, Answer").Rows() // (*sql.Rows, error)
 	defer rows.Close()
 	for rows.Next() {
 		var cking peopleck
