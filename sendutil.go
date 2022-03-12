@@ -3,6 +3,7 @@ package main
 import (
 	"TelegramGroupBot/db"
 	"log"
+	"strconv"
 	"time"
 
 	api "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -109,5 +110,9 @@ func PeopleCKdel(gid int64,uid int){
 	time.Sleep(time.Second*180)
 	if(db.IfPeopleck(gid,uid)){
 		banMember(gid, uid, -1)
+		log.Println(strconv.Itoa(uid)+" 被ban!!!")
+	}else{
+		log.Println(strconv.Itoa(uid)+" 挺过180s!!!")
 	}
+
 }
