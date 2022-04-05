@@ -93,9 +93,9 @@ func readAllGroupRules() {
 func AddCKpeople(gid int64, uid int, Answer string) {
 	//db.Model(&peopleck{}).Create("")
 	if err := db.Create(&peopleck{GroupId: gid, Uid: uid, Answer: Answer}).Error; err != nil {
-		//ok
+		//error
 	}
-
+	//true
 }
 
 func CKpeopleProgress(gid int64, uid int, Answer string) bool {
