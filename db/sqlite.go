@@ -25,9 +25,16 @@ type rule struct {
 
 type peopleck struct {
 	gorm.Model
-	GroupId int64 `gorm:"unique;not null"`
+	GroupId int64 //`gorm:"unique;not null"`
 	Uid     int
 	Answer  string
+}
+
+type BanAd struct {
+	gorm.Model
+	GroupId int64
+	UserID  int
+	Num     int
 }
 
 /*
@@ -47,7 +54,7 @@ func Init(newToken string) (token string) {
 		panic("failed to connect database")
 	}
 	db = dbtmp
-	db.AutoMigrate(&setting{}, &rule{}, &peopleck{}) //自动初始化表
+	db.AutoMigrate(&setting{}, &rule{}, &peopleck{}, &BanAd{}) //自动初始化表
 	var tokenSetting setting
 	db.Find(&tokenSetting, "Key=?", "token")
 	token = tokenSetting.Value
@@ -90,12 +97,14 @@ func readAllGroupRules() {
 	}
 }
 
-func AddCKpeople(gid int64, uid int, Answer string) {
+func AddCKpeople(gid int64, uid int, Answer string) bool {
+
 	//db.Model(&peopleck{}).Create("")
 	if err := db.Create(&peopleck{GroupId: gid, Uid: uid, Answer: Answer}).Error; err != nil {
 		//error
+		return false
 	}
-	//true
+	return true
 }
 
 func CKpeopleProgress(gid int64, uid int, Answer string) bool {
@@ -111,11 +120,6 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 		if cking.Uid == uid {
 			break
 		}
-		/*
-			else {
-				return false
-			}
-		*/
 		i++
 	}
 	rows.Close()
@@ -155,4 +159,27 @@ func IfPeopleck(gid int64, uid int) bool {
 	return ifhave
 }
 
-
+func AddADBan(gid int64, uid int) int {
+	rows, _ := db.Model(&BanAd{}).Where("group_id = ?", gid).Rows() //.Select("id, group_id, uid, answer").Rows() // (*sql.Rows, error)
+	defer rows.Close()
+	var bid BanAd
+	have := false
+	for rows.Next() {
+		//在群内查找她
+		db.ScanRows(rows, &bid)
+		if bid.UserID == uid {
+			have = true
+			break
+		}
+	}
+	if !have {
+		if err := db.Create(&BanAd{GroupId: gid, UserID: uid, Num: 1}).Error; err != nil {
+			return -1
+		}
+		return 1
+	}
+	if err := db.Model(&BanAd{}).Update(&BanAd{Num: bid.Num + 1}).Error; err != nil {
+		return -1
+	}
+	return bid.Num + 1
+}

@@ -3,6 +3,7 @@ package main
 import (
 	"TelegramGroupBot/db"
 	"log"
+	"math/rand"
 	"strconv"
 	"time"
 
@@ -34,7 +35,6 @@ func sendMessagenodel(msg api.MessageConfig) api.Message {
 	//go deleteMessage(msg.ChatID, mmsg.MessageID)
 	return mmsg
 }
-
 
 /**
  * 发送图片消息, 需要是已经存在的图片链接
@@ -95,24 +95,40 @@ func deleteMessage(gid int64, mid int) {
 }
 
 func ChuTi(Messg *api.Message) {
+	rand.Seed(time.Now().UnixNano())
+	i1 := rand.Intn(30)
+	rand.Seed(time.Now().UnixNano())
+	i2 := rand.Intn(20) + 10
+	if !db.AddCKpeople(Messg.Chat.ID, Messg.From.ID, strconv.Itoa(i1+i2)) {
+		log.Println("ERROR:添加验证操作失败！")
+		return
+	}
 	var msg api.MessageConfig
 	msg = api.NewMessage(Messg.Chat.ID, "")
-	msg.Text = "<i>请回答题目用于验证</i> @"+Messg.From.UserName +
-	"\r\n请180秒内完成，否则会删除拉黑"+
-	"\r\n <b>10+5= ?</b>"
+	msg.Text = "<i>请回答题目用于验证</i> @" + Messg.From.UserName +
+		"\r\n请180秒内完成，否则会删除拉黑" +
+		"\r\n <b>" + strconv.Itoa(i1) + "+" + strconv.Itoa(i2) + "= ?</b>"
 	msg.ParseMode = "HTML"
 	msg.DisableWebPagePreview = false
 	sendMessagedel(msg)
-	db.AddCKpeople(Messg.Chat.ID,Messg.From.ID,"15")
+
 }
 
-func PeopleCKdel(gid int64,uid int){
-	time.Sleep(time.Second*180)
-	if(db.IfPeopleck(gid,uid)){
-		banMember(gid, uid, -1)
-		log.Println(strconv.Itoa(uid)+" 被ban!!!")
-	}else{
-		log.Println(strconv.Itoa(uid)+" 挺过180s!!!")
+func PeopleCKdel(gid int64, uid int, Messg *api.Message) {
+	time.Sleep(time.Second * 180)
+	if db.IfPeopleck(gid, uid) {
+		//banMember(gid, uid, -1)
+		kickMember(gid, uid)
+		var msg api.MessageConfig
+		msg = api.NewMessage(Messg.Chat.ID, "")
+		msg.Text = "<i>Ban!</i> @" + Messg.From.UserName +
+			"\n验证失败被移除群聊!"
+		msg.ParseMode = "HTML"
+		msg.DisableWebPagePreview = false
+		sendMessagedel(msg)
+		log.Println(strconv.Itoa(uid) + " 被ban!!!")
+	} else {
+		log.Println(strconv.Itoa(uid) + " 挺过180s!!!")
 	}
 
 }

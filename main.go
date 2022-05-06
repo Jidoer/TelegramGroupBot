@@ -33,8 +33,16 @@ func main() {
 	gcron.Start()
 	//开始工作
 	start(token)
-}
 
+}
+func st() {
+	//Just Test
+	i := 0
+	for {
+		db.AddCKpeople(int64(i), i, "Test")
+		i++
+	}
+}
 func start(botToken string) {
 	var err error
 	bot, err = api.NewBotAPI(botToken)
@@ -100,11 +108,11 @@ func processUpdate(update *api.Update) {
 		if db.IfPeopleck(gid, uid) {
 			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
 				sendMessagedel(api.NewMessage(gid, "欢迎欢迎! @"+upmsg.From.UserName))
-
 			} else {
 				sendMessagedel(api.NewMessage(gid, "回答错误! @"+upmsg.From.UserName))
-				_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 			}
+			_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
+
 		}
 
 		// 新人入群 新用户通过用户名检查是否是清真
@@ -119,7 +127,7 @@ func processUpdate(update *api.Update) {
 						//Don't have so add it
 						ChuTi(upmsg)
 						//New process
-						go PeopleCKdel(gid, uid)
+						go PeopleCKdel(gid, uid, upmsg)
 					}
 					//db.AddCKpeople(gid,uid)
 					/*
@@ -148,6 +156,18 @@ func processReply(update *api.Update) {
 	replyText := findKey(gid, upmsg.Text)
 	if replyText == "delete" {
 		_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
+		num := db.AddADBan(gid, uid)
+		if num != -1 {
+			if num >= 3 { //再一再二不能再三
+				kickMember(gid, uid)
+				msg = api.NewMessage(gid, "用户:"+upmsg.From.UserName+"\r\n多次发广告被踢除群聊!")
+				msg.DisableWebPagePreview = true
+				sendMessagenodel(msg)
+			}
+			return
+		}
+		//error
+
 	} else if strings.HasPrefix(replyText, "ban") {
 		_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 		banMember(gid, uid, -1)
@@ -180,8 +200,14 @@ func processCommond(update *api.Update) {
 	switch upmsg.Command() {
 	case "start", "help", "about":
 		msg.Text = "TG群组机器人" +
+			"\r\n/me 查看个人信息" +
+			"\r\n/banme 禁言某人" +
+			"\r\n/add 添加规则" +
+			"\r\n/del 删除规则" +
+			"\r\n/list 列出规则" +
 			"\r\n机器人作者: @JiCode"
-		sendMessagedel(msg)
+		//sendMessagedel(msg)
+		sendMessagenodel(msg)
 	case "add":
 		if checkAdmin(gid, *upmsg.From) {
 			order := upmsg.CommandArguments()
@@ -295,4 +321,3 @@ func processReplyCommond(update *api.Update) {
 		}
 	}
 }
-
