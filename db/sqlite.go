@@ -118,6 +118,7 @@ func CKpeopleProgress(gid int64, uid int, Answer string) bool {
 		db.ScanRows(rows, &cking)
 		log.Println(cking)
 		if cking.Uid == uid {
+			rows.Close()
 			break
 		}
 		i++
@@ -169,6 +170,7 @@ func AddADBan(gid int64, uid int) int {
 		db.ScanRows(rows, &bid)
 		if bid.UserID == uid {
 			have = true
+			rows.Close()
 			break
 		}
 	}

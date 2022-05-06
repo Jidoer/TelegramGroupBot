@@ -159,10 +159,10 @@ func processReply(update *api.Update) {
 		num := db.AddADBan(gid, uid)
 		if num != -1 {
 			if num >= 3 { //再一再二不能再三
-				kickMember(gid, uid)
 				msg = api.NewMessage(gid, "用户:"+upmsg.From.UserName+"\r\n多次发广告被踢除群聊!")
 				msg.DisableWebPagePreview = true
 				sendMessagenodel(msg)
+				kickMember(gid, uid)
 			}
 			return
 		}
