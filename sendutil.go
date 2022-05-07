@@ -118,14 +118,14 @@ func PeopleCKdel(gid int64, uid int, Messg *api.Message) {
 	time.Sleep(time.Second * 180)
 	if db.IfPeopleck(gid, uid) {
 		//banMember(gid, uid, -1)
-		kickMember(gid, uid)
 		var msg api.MessageConfig
 		msg = api.NewMessage(Messg.Chat.ID, "")
 		msg.Text = "<i>Ban!</i> @" + Messg.From.UserName +
 			"\n验证失败被移除群聊!"
 		msg.ParseMode = "HTML"
 		msg.DisableWebPagePreview = false
-		sendMessagedel(msg)
+		sendMessagenodel(msg)
+		kickMember(gid, uid)
 		log.Println(strconv.Itoa(uid) + " 被ban!!!")
 	} else {
 		log.Println(strconv.Itoa(uid) + " 挺过180s!!!")
