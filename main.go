@@ -209,8 +209,8 @@ func processCommond(update *api.Update) {
 			"\r\n/me 查看个人信息" +
 			"\r\n/banme 禁言某人" +
 			"\r\n/add 添加规则" +
-			"\r\n说明:===ad 则为广告消息,三次移除群聊"+
-			"===delete 则为禁止词汇,机器人只删除消息"+
+			"\r\n说明:\r\n===ad 则为广告消息,三次移除群聊"+
+			"\r\n===delete 则为禁止词汇,机器人只删除消息"+
 			"\r\n/del 删除规则" +
 			"\r\n/list 列出规则" +
 			"\r\n机器人作者: @JiCode"
