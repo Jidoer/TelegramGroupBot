@@ -154,7 +154,7 @@ func processReply(update *api.Update) {
 	gid := upmsg.Chat.ID
 	uid := upmsg.From.ID
 	replyText := findKey(gid, upmsg.Text)
-	if replyText == "delete" {
+	if replyText == "ad" {
 		_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 		num := db.AddADBan(gid, uid)
 		if num != -1 {
@@ -163,12 +163,18 @@ func processReply(update *api.Update) {
 				msg.DisableWebPagePreview = true
 				sendMessagenodel(msg)
 				kickMember(gid, uid)
+				return
 			}
+			msg = api.NewMessage(gid, "用户:"+upmsg.From.UserName+"\r\n发广告!警告"+strconv.Itoa(num)+"次\r\n3次踢出哦.")
+			msg.DisableWebPagePreview = true
+			sendMessagenodel(msg)
 			return
 		}
 		//error
+	}else if replyText == "delete" { //Just del
+		_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 
-	} else if strings.HasPrefix(replyText, "ban") {
+	}else if strings.HasPrefix(replyText, "ban") {
 		_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 		banMember(gid, uid, -1)
 	} else if strings.HasPrefix(replyText, "kick") {
@@ -203,6 +209,8 @@ func processCommond(update *api.Update) {
 			"\r\n/me 查看个人信息" +
 			"\r\n/banme 禁言某人" +
 			"\r\n/add 添加规则" +
+			"\r\n说明:===ad 则为广告消息,三次移除群聊"+
+			"===delete 则为禁止词汇,机器人只删除消息"+
 			"\r\n/del 删除规则" +
 			"\r\n/list 列出规则" +
 			"\r\n机器人作者: @JiCode"
