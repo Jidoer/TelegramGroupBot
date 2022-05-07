@@ -9,9 +9,12 @@ import (
 )
 
 const addText = "格式要求:\r\n" +
-	"`/add 关键字===回复内容`\r\n\r\n" 
+	"`/add 关键字===回复内容`\r\n\r\n" +
+	"\r\n说明:" +
+	"\r\n===ad 则为广告消息(三次移除群聊)" +
+	"\r\n===delete 则为禁止词汇,机器人只删除消息"
 const delText = "格式要求:\r\n" +
-	"`/del 关键字`\r\n\r\n" 
+	"`/del 关键字`\r\n\r\n"
 
 /**
  * 添加规则
@@ -89,4 +92,3 @@ func findKey(gid int64, input string) string {
 	}
 	return ""
 }
-
