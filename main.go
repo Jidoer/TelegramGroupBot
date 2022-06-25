@@ -211,7 +211,7 @@ func processCommond(update *api.Update) {
 			"\r\n/add 添加规则" +
 			"\r\n/del 删除规则" +
 			"\r\n/list 列出规则" +
-			"\r\n机器人作者: @JiCode"
+			"\r\n机器人作者: Github: Jidoer"
 		//sendMessagedel(msg)
 		sendMessagenodel(msg)
 	case "add":
