@@ -108,9 +108,9 @@ func processUpdate(update *api.Update) {
 
 		if db.IfPeopleck(gid, uid) {
 			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
-				sendMessagedel(api.NewMessage(gid, "欢迎欢迎! @"+upmsg.From.UserName))
+				sendMessageCostomdel(api.NewMessage(gid, "验证完成!"+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
 			} else {
-				sendMessagedel(api.NewMessage(gid, "回答错误! @"+upmsg.From.UserName))
+				sendMessageCostomdel(api.NewMessage(gid, "回答错误!"+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
 			}
 			_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 
@@ -160,13 +160,13 @@ func processReply(update *api.Update) {
 		num := db.AddADBan(gid, uid)
 		if num != -1 {
 			if num >= 3 { //再一再二不能再三
-				msg = api.NewMessage(gid, "用户:"+upmsg.From.UserName+"\r\n多次发广告被踢除群聊!")
+				msg = api.NewMessage(gid, "用户:"+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"+"\r\n多次发广告被踢除群聊!")
 				msg.DisableWebPagePreview = true
 				sendMessagenodel(msg)
 				kickMember(gid, uid)
 				return
 			}
-			msg = api.NewMessage(gid, "用户:"+upmsg.From.UserName+"\r\n发广告!警告"+strconv.Itoa(num)+"次\r\n3次踢出哦.")
+			msg = api.NewMessage(gid, "用户:"+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"+"\r\n发广告!警告"+strconv.Itoa(num)+"次\r\n3次踢出哦.")
 			msg.DisableWebPagePreview = true
 			sendMessagenodel(msg)
 			return
