@@ -108,9 +108,9 @@ func processUpdate(update *api.Update) {
 
 		if db.IfPeopleck(gid, uid) {
 			if db.CKpeopleProgress(gid, uid, upmsg.Text) {
-				sendMessageCostomdel(api.NewMessage(gid, "验证完成!["+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
+				sendMessageCostomdel(api.NewMessage(gid, "验证完成!"+"["+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
 			} else {
-				sendMessageCostomdel(api.NewMessage(gid, "回答错误!["+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
+				sendMessageCostomdel(api.NewMessage(gid, "回答错误!"+"["+ upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(upmsg.From.ID) + ")"),3)
 			}
 			_, _ = bot.DeleteMessage(api.NewDeleteMessage(gid, upmsg.MessageID))
 

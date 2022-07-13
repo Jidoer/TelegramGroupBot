@@ -137,7 +137,7 @@ func PeopleCKdel(gid int64, uid int, Messg *api.Message) {
 		//banMember(gid, uid, -1)
 		var msg api.MessageConfig
 		msg = api.NewMessage(Messg.Chat.ID, "")
-		msg.Text = "![" + Messg.From.String() + "](tg://user?id=" + strconv.Itoa(Messg.From.ID) + ")" +
+		msg.Text = "[" + Messg.From.String() + "](tg://user?id=" + strconv.Itoa(Messg.From.ID) + ")" +
 			"\n验证失败被移除群聊!"
 		msg.ParseMode = "Markdown" //HTML
 		msg.DisableWebPagePreview = false
