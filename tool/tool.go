@@ -13,31 +13,6 @@ import (
 	//"golang.org/x/text/transform"
 )
 
-/********
-*Userinfo数据库格式
-*UID      -> Auto int
-*username -> Base64URL-E-String
-*password -> DES
-*sex      -> int
-*Created  -> time.time
-*Vip      -> int
-*phone    -> 10086 ?
-*email    -> Base64URL-E-String
-*loginip  -> 0.0.0.0 ? string
- */
-
-/**********
-*Server SQL
-*UID      -> Auto int
-*name     -> string
-*ip       -> string
-*type     -> string
-*info     -> string
- */
-
-func search() {
-
-}
 
 func interface2String(inter interface{}) string {
 

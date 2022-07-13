@@ -43,6 +43,7 @@ func st() {
 		i++
 	}
 }
+
 func start(botToken string) {
 	var err error
 	bot, err = api.NewBotAPI(botToken)
@@ -254,7 +255,7 @@ func processCommond(update *api.Update) {
 			}
 		}
 	case "admin":
-		msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(uid) + ") 请求管理员出来打屁股\r\n\r\n" + getAdmins(gid)
+		msg.Text = "[" + upmsg.From.String() + "](tg://user?id=" + strconv.Itoa(uid) + ") !!\r\n\r\n" + getAdmins(gid)
 		msg.ParseMode = "Markdown"
 		sendMessagedel(msg)
 		banMember(gid, uid, 30)
