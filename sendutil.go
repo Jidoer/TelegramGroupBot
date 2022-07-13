@@ -105,8 +105,8 @@ func ChuTi(Messg *api.Message) {
 	}
 	var msg api.MessageConfig
 	msg = api.NewMessage(Messg.Chat.ID, "")
-	msg.Text = "<i>请回答题目用于验证</i> "+"[" + Messg.From.String() + "](tg://user?id=" + strconv.Itoa(Messg.From.ID) + ")"  +
-		"\r\n请180秒内完成，否则会删除拉黑" +
+	msg.Text = "*请回答题目用于验证*"+"[@" + Messg.From.String() + "](tg://user?id=" + strconv.Itoa(Messg.From.ID) + ")"  +
+		"\r\n**请180秒内完成，否则会删除拉黑**" +
 		"\r\n <b>" + strconv.Itoa(i1) + "+" + strconv.Itoa(i2) + "= ?</b>"
 	msg.ParseMode = "Markdown" 
 	msg.DisableWebPagePreview = false
@@ -121,7 +121,7 @@ func PeopleCKdel(gid int64, uid int, Messg *api.Message) {
 		var msg api.MessageConfig
 		msg = api.NewMessage(Messg.Chat.ID, "")
 		msg.Text = "<i>Ban!</i> @" +  "[" + Messg.From.String() + "](tg://user?id=" + strconv.Itoa(Messg.From.ID) + ")" +
-			"\n验证失败被移除群聊!"
+			"\n*验证失败被移除群聊!*"
 		msg.ParseMode = "Markdown" //HTML
 		msg.DisableWebPagePreview = false
 		sendMessagenodel(msg)
