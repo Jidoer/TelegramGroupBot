@@ -17,6 +17,7 @@ func sendMessagedel(msg api.MessageConfig) api.Message {
 	if msg.Text == "" {
 		return api.Message{}
 	}
+	msg.ParseMode = "Markdown"
 	mmsg, err := bot.Send(msg)
 	if err != nil {
 		log.Println(err)
@@ -29,6 +30,7 @@ func sendMessageCostomdel(msg api.MessageConfig,t int) api.Message {
 	if msg.Text == "" {
 		return api.Message{}
 	}
+	msg.ParseMode = "Markdown"
 	mmsg, err := bot.Send(msg)
 	if err != nil {
 		log.Println(err)
@@ -46,6 +48,7 @@ func sendMessagenodel(msg api.MessageConfig) api.Message {
 	if msg.Text == "" {
 		return api.Message{}
 	}
+	msg.ParseMode = "Markdown"
 	mmsg, err := bot.Send(msg)
 	if err != nil {
 		log.Println(err)
