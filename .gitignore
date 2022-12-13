@@ -16,3 +16,5 @@
 .idea/
 gorm.txt
 TelegramGroupBot
+data.db
+*.db
